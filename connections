@@ -1,0 +1,16 @@
+graveyard, road
+road, clock tower
+road, saloon
+road, alley
+road, pasture
+clock tower, road
+saloon, road
+pasture, road
+pasture, barn
+pasture, valley
+valley, pasture
+alley, road
+alley, train
+train, alley
+train, city
+city, train
