@@ -10,6 +10,11 @@ import java.awt.event.*;
  */
 public class GameDriver{
     /**
+     * Game manager for the experience
+     */
+    GameManager gameSystem;
+
+    /**
      * Constructor class to allow the driver to be encapsulated by a Swing window
      */
     public GameDriver() {
@@ -22,46 +27,14 @@ public class GameDriver{
         gameWindow.setSize(width, height);
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        // Menu panel 
-        JPanel menu = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-
-        // Basic Game Title: can change to an image later if we get ambitious
-        JLabel title = new JLabel("Rootin Tootin Revenge");
-        title.setFont(new Font("Comic Sans",Font.PLAIN, 40));
-        c.fill = GridBagConstraints.PAGE_START;
-        c.weightx = 1.0;
-        c.weighty = 1.0;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.ipady = 100;
-        menu.add(title, c);
-
-        // Start Button:
-        JButton startBt = new JButton("New Game");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weighty = 1.0;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.ipady = 0;
-        // This format is how Buttons perform functions and other commands
-        startBt.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                menu.setVisible(false);
-                GameManager.startGame(gameWindow, "Graveyard");
-            }
-
-        });
-        menu.add(startBt, c);
-
-        // Sets the current panel to menu to start the game
-        gameWindow.add(menu);
-        gameWindow.setVisible(true);
+        // Creates the main gameSystem which changes locations, menus, etc.
+        this.gameSystem = new GameManager(gameWindow);
 
         // Window quality changes; title of window, initial size of window, and makes it visible
-        menu.setVisible(true);
+        this.gameSystem.startGame(null);
 
+        // Sets the current panel to menu to start the game
+        gameWindow.setVisible(true);
     }
 
 
