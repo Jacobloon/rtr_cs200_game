@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import components.*;
 
 /**
  * Driving class for the CS200 game final project. Utilizes Java Swing and other components to create a game interface

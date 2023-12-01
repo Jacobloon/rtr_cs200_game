@@ -1,4 +1,5 @@
 import javax.swing.*;
+import components.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -13,6 +14,16 @@ public class GameManager {
      * Game window to manage
      */
     JFrame gameWindow;
+    
+    /**
+     * Current game panel
+     */
+    GamePanel gamePanel;
+
+    /**
+     * Our hero; he rode a blazing saddle, he wore a shining star
+     */
+    Player user = new Player();
 
     /**
      * Constructor that takes in the game window to manage
@@ -28,7 +39,6 @@ public class GameManager {
      * @param gameWindow JFrame of the game
      */
     public void startGame(String location) {
-        //gameWindow.add(graveyard());
         changeLocation( "menu");
     }
     /**
@@ -36,14 +46,17 @@ public class GameManager {
      * @param gameWindow JFrame to change
      * @param location String location name
      */
+    // TODO: This might be casuing the issue of player not moving after switching locations
     public void changeLocation(String location) {
-        // Can probably change this whole if/else statement to call from a HashMap
+        gameWindow.getContentPane().removeAll();
+        // TODO: Can probably change this whole if/else statement to call from a HashMap
         if (location.equals("menu")) {
-            gameWindow.add(loadMenu());
+            gamePanel = loadMenu();
         }
         else if (location.equals("graveyard")) {
-            gameWindow.add(loadGraveyard());
+            gamePanel = loadGraveyard();
         }
+        gameWindow.getContentPane().add(gamePanel);
     }
 
     // GAME PANELS ========================================================================================
@@ -51,9 +64,9 @@ public class GameManager {
     /**
      * Creates the main menu panel, can be called again later
      */
-    public JPanel loadMenu() {
+    public GamePanel loadMenu() {
         // Menu panel 
-        JPanel menu = new JPanel(new GridBagLayout());
+        GamePanel menu = new GamePanel(new GridBagLayout(), user);
         GridBagConstraints c = new GridBagConstraints();
 
         // Basic Game Title: can change to an image later if we get ambitious
@@ -90,9 +103,9 @@ public class GameManager {
     /**
      * This class represents the graveyard location in the game. 
      */
-    private JPanel loadGraveyard() {
+    private GamePanel loadGraveyard() {
         // Menu panel 
-        JPanel menu = new JPanel(new GridBagLayout());
+        GamePanel menu = new GamePanel(new GridBagLayout(), user);
         GridBagConstraints c = new GridBagConstraints();
 
         // Basic Game Title: can change to an image later if we get ambitious
@@ -105,17 +118,17 @@ public class GameManager {
         c.gridy = 0;
         c.ipady = 100;
         menu.add(title, c);
-
-        // Start Button:
-        JButton startBt = new JButton("Return");
+        // Return Button:
+        JButton returnBt = new JButton("Return");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weighty = 1.0;
         c.gridx = 0;
         c.gridy = 1;
         c.ipady = 0;
-        menu.add(startBt, c);
+        menu.add(returnBt, c);
+        
         // This format is how Buttons perform functions and other commands
-        startBt.addActionListener(new ActionListener() {
+        returnBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 menu.setVisible(false);
