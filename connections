@@ -5,12 +5,19 @@ road, alley
 road, pasture
 clock tower, road
 saloon, road
-pasture, road
-pasture, barn
-pasture, valley
+saloon, alleyway
+alleyway, saloon
+alleyway, road
+alleyway, valley
+valley, alleyway
 valley, pasture
-alley, road
-alley, train
-train, alley
-train, city
-city, train
+valley, city
+pasture, road
+pasture, valley
+pasture, barn
+pasture, tracks
+barn, pasture
+tracks, pasture
+tracks, city
+city, tracks
+city, valley

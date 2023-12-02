@@ -8,36 +8,109 @@ import java.awt.Graphics;
  * @version 12/1/2023
  */
 public class Player {
-
+    public enum PlayerDirections {
+      UP, DOWN, LEFT, RIGHT
+    }
+    
     private int x = 28;
     private int y = 190;
-    private int speed = 10;
+    private int speed = 10; // Determines how fast the player moves
+    private int velX = 0;
+    private int velY = 0;
 
+    // Player Size variables
+    private int pWidth = 80;
+    private int pHeight = 80;
+
+    /**
+     * Constructor for Player class that will store data that needs to be
+     * saved and reloaded.
+     */
     public Player() {
-
+        // TODO: Add info
     }
 
+    /**
+     * This draws the player on the screen, and is the method that gets called every tick
+     * @param g Graphics panel
+     */
     public void draw(Graphics g) {
+        x+=velX;
+        y+=velY;
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, 80, 80);
+        checkCollision();
+        g.fillRect(x, y, pWidth, pHeight);
+        
+    }
+
+    // TODO: Put in GamePanel??
+    public void checkCollision() {
+        if (getY() <= 0) {
+            setY(0);
+        }
+        else if (getY() >= 600 - pHeight) { // TODO: Panel Height
+            setY(600 - pHeight);            // TODO: Fix half of player going off bottom screen
+        }
+        if (getX() <= 0) {
+            setX(0);
+        }
+        else if (getX() >= 600 - pWidth) { // TODO: Panel Height
+            setX(600 - pWidth);           
+        }
     }
 
     // TODO: Change to KeyBindings for smoother movement?
     public void Move(PlayerDirections direction) {
         switch (direction) {
         case UP:
-            y -= speed;
+            setVelY(-1 * speed);
             break;
         case DOWN:
-            y += speed;
+            setVelY(speed);
             break;
         case LEFT:
-            x -= speed;
+            setVelX(-1 * speed);
             break;
         case RIGHT:
-            x += speed;
+            setVelX(speed);
             break;
         }
     }
     
+    /**
+     * Returns player's x position
+     * @return int x position
+     */
+    public int getX() {
+      return this.x;
+    }
+
+    /**
+     * Sets the player's x position
+     */
+    public void setX(int x) {
+      this.x = x;
+    }
+    /**
+     * Returns player's y position
+     * @return int y position
+     */
+    public int getY() {
+      return this.y;
+    }
+
+    /**
+     * Sets the player's y position
+     */
+    public void setY(int y) {
+      this.y = y;
+    }
+
+    // TODO: Smooth movement
+    public void setVelX(int velX) {
+        this.velX = velX;
+    }
+    public void setVelY(int velY) {
+        this.velY = velY;
+    }
 }

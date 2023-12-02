@@ -22,32 +22,68 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     Timer t;
 
-    public GamePanel(LayoutManager layout, Player player) {
+   //TODO This takes in a location description to allow locations travel x and ys instead of name
+    public GamePanel(LayoutManager layout, GameManager manager, Player player, String name) {
         super(layout);
+        // TODOL Remove desc
+        LocationDescription desc = new LocationDescription("Description", name, "NONE");
         this.player = player;
         addKeyListener(new KeyAdapter() {
+            // Event when a key is pressed
             @Override
             public void keyPressed(KeyEvent e) {
                 int KeyCode = e.getKeyCode();
-                if (KeyCode == KeyEvent.VK_W) {             // W Keypress
-                    player.Move(PlayerDirections.UP);
+                if (player.getX() > 500) {
+                    player.setX(0);
+                    manager.changeLocation("Place");
+                    t.stop();   // IMPORTANT LINE: Stops the old timer so game doesn't lag out 
                 }
-                if (KeyCode == KeyEvent.VK_A) {
-                    player.Move(PlayerDirections.LEFT);     // A Keypress
+                switch (KeyCode) {
+                    case KeyEvent.VK_W:
+                        player.Move(Player.PlayerDirections.UP); // W Keypress
+                        break;
+                    case KeyEvent.VK_A:
+                        player.Move(Player.PlayerDirections.LEFT); // A Keypress
+                        break;
+                    case KeyEvent.VK_S:
+                        player.Move(Player.PlayerDirections.DOWN); // S Keypress
+                        break;
+                    case KeyEvent.VK_D:
+                        player.Move(Player.PlayerDirections.RIGHT); // D Keypress
+                        break;
                 }
-                if (KeyCode == KeyEvent.VK_S) {
-                    player.Move(PlayerDirections.DOWN);     // S Keypress
-                }
-                if (KeyCode == KeyEvent.VK_D) {
-                    player.Move(PlayerDirections.RIGHT);    // D Keypress
+            }
+            // Event when a key is released
+            @Override
+            public void keyReleased(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_W:
+                        player.setVelY(0);
+                        break;
+                    case KeyEvent.VK_A:
+                        player.setVelX(0);
+                        break;
+                    case KeyEvent.VK_S:
+                        player.setVelY(0);
+                        break;
+                    case KeyEvent.VK_D:
+                        player.setVelX(0);
+                        break;
                 }
             }
         });
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         setBackground(new Color(16, 16, 16));
-        t = new Timer(5, this);
+        t = new Timer(15, this);
         t.start();
+    }
+    
+    /**
+     * Checks for collisions between the player and walls/objects
+     */
+    public void checkCollision() {
+        // TODO: Move player back if hitting wall
     }
 
     public void paintComponent(Graphics g) {
@@ -58,5 +94,10 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+    }
+
+    // TODO: returns false when panel is to be closed
+    public boolean isActive() {
+        return true;
     }
 }

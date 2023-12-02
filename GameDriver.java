@@ -26,6 +26,7 @@ public class GameDriver{
         JFrame gameWindow = new JFrame();
         gameWindow.setTitle("Rootin Tootin Revenge");
         gameWindow.setSize(width, height);
+        gameWindow.setResizable(false);
         gameWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Creates the main gameSystem which changes locations, menus, etc.
