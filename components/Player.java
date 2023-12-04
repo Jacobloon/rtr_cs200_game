@@ -1,6 +1,8 @@
 package components;
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import components.*;
 
 /**
  * Class used to draw and define the player within our game
@@ -30,6 +32,7 @@ public class Player {
         // TODO: Add info
     }
 
+
     /**
      * This draws the player on the screen, and is the method that gets called every tick
      * @param g Graphics panel
@@ -37,10 +40,9 @@ public class Player {
     public void draw(Graphics g) {
         x+=velX;
         y+=velY;
-        g.setColor(Color.WHITE);
         checkCollision();
-        g.fillRect(x, y, pWidth, pHeight);
-        
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, pWidth, pHeight); 
     }
 
     // TODO: Put in GamePanel??
@@ -48,8 +50,8 @@ public class Player {
         if (getY() <= 0) {
             setY(0);
         }
-        else if (getY() >= 600 - pHeight) { // TODO: Panel Height
-            setY(600 - pHeight);            // TODO: Fix half of player going off bottom screen
+        else if (getY() >= 600 - pHeight - (pHeight / 2)) { // TODO: Panel Height
+            setY(600 - pHeight - (pHeight / 2));            // TODO: Fix half of player going off bottom screen
         }
         if (getX() <= 0) {
             setX(0);
@@ -112,5 +114,18 @@ public class Player {
     }
     public void setVelY(int velY) {
         this.velY = velY;
+    }
+    public int getVelX() {
+        return this.velX;
+    }
+    public int getVelY() {
+        return this.velY;
+    }
+
+    public int getSpeed() {
+        return this.speed;
+    }
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 }

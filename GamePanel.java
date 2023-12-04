@@ -22,9 +22,15 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     Timer t;
 
+    /**
+     * Game manager class for our panel
+     */
+    GameManager manager;
+
    //TODO This takes in a location description to allow locations travel x and ys instead of name
     public GamePanel(LayoutManager layout, GameManager manager, Player player, String name) {
         super(layout);
+        this.manager = manager;
         // TODOL Remove desc
         LocationDescription desc = new LocationDescription("Description", name, "NONE");
         this.player = player;
@@ -33,11 +39,6 @@ public class GamePanel extends JPanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 int KeyCode = e.getKeyCode();
-                if (player.getX() > 500) {
-                    player.setX(0);
-                    manager.changeLocation("Place");
-                    t.stop();   // IMPORTANT LINE: Stops the old timer so game doesn't lag out 
-                }
                 switch (KeyCode) {
                     case KeyEvent.VK_W:
                         player.Move(Player.PlayerDirections.UP); // W Keypress
@@ -93,6 +94,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (player.getX() > 500) {
+            player.setX(0);
+            manager.changeLocation("Place");
+            t.stop();   // IMPORTANT LINE: Stops the old timer so game doesn't lag out 
+        }
         repaint();
     }
 
