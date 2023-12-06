@@ -12,6 +12,8 @@ public class GameLayout {
     private HashMap<String, Set<String>> connections;
     // associates a given location with its description object
     private HashMap<String, LocationDescription> descriptions;
+    // starting position on a loaded game
+    private String start = "";
 
     /**
      * Default constructor with no starting info given
@@ -19,6 +21,19 @@ public class GameLayout {
     public GameLayout() {
         this.connections = new HashMap<String, Set<String>>();
         this.descriptions = new HashMap<String, LocationDescription>();
+        this.newGame();
+    }
+
+    /**
+     * Constructor for loaded games
+     * @param connections
+     * @param descriptions
+     * @param start String starting location
+     */
+    public GameLayout(HashMap<String, Set<String>> connections, HashMap<String, LocationDescription> descriptions, String start) {
+        this.connections = connections;
+        this.descriptions = descriptions;
+        this.start = start;
     }
 
     /**
@@ -30,6 +45,44 @@ public class GameLayout {
         return descriptions.get(name);
     }
 
+    // TODO: Complete
+    public void newGame() {
+        try {
+            ArrayList<String> locations = new ArrayList<String>();
+            File template = new File("locations");
+            System.out.println(template.getAbsolutePath()); // TEST
+            Scanner fileS = new Scanner(template);
+            while (fileS.hasNext()) {
+                locations.add(fileS.next());
+            }
+            Random rand = new Random();
+            int revolverPos = rand.nextInt(2, locations.size());
+            // TODO: Add trap and nemesis
+            for (int i=0;i<locations.size();i++) {
+                String property = (i == revolverPos) ? "REVOLVER" : "NONE";
+                LocationDescription place = new LocationDescription("Place", locations.get(i), property);
+                this.descriptions.put(locations.get(i), place);
+            }
+            fileS.close();
+            // TODO: Add connections
+            template = new File("connections");
+            fileS = new Scanner(template);
+            while (fileS.hasNextLine()) {
+                String[] line = fileS.nextLine().split(",");
+                if (!connections.containsKey(line[0])) {
+                    Set<String> newSet = new HashSet<String>();
+                    connections.put(line[0], newSet);
+                }
+                connections.get(line[0]).add(line[1] + ":" + line[2]);
+            }
+            fileS.close();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("File not found exception");
+        }
+    }
+
+
     /**
      * Saves the current game's information
      * 
@@ -39,7 +92,8 @@ public class GameLayout {
     public void saveGame(String filename) {
         try {
             ObjectOutputStream ow = new ObjectOutputStream(new FileOutputStream(filename));
-            ow.writeObject(this);
+            ow.writeObject(new GameLayout(this.connections, this.descriptions, this.start));
+            System.out.println("Variable mAde");
             ow.close();
         }
         catch (IOException io) {
@@ -121,5 +175,12 @@ public class GameLayout {
      */
     public void setDescriptions(HashMap<String, LocationDescription> descriptions) {
         this.descriptions = descriptions;
+    }
+
+    /**
+     * returns the player's starting location
+     */
+    public String getStart() {
+        return this.start;
     }
 }

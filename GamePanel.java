@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import components.*;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Extended JPanel class to add ActionListener components so Players
@@ -27,13 +29,21 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     GameManager manager;
 
+    /**
+     * Names and positions of edges connected to this location
+     */
+    HashMap<String, String> edgeMap = new HashMap<String, String>();
+
    //TODO This takes in a location description to allow locations travel x and ys instead of name
-    public GamePanel(LayoutManager layout, GameManager manager, Player player, String name) {
+    public GamePanel(LayoutManager layout, GameManager manager, Player player, String name, Set<String> edges) {
         super(layout);
         this.manager = manager;
-        // TODOL Remove desc
-        LocationDescription desc = new LocationDescription("Description", name, "NONE");
+        for (String edge : edges) {
+            String[] data = edge.split(":");
+            this.edgeMap.put(data[1], data[0]);
+        }
         this.player = player;
+        
         addKeyListener(new KeyAdapter() {
             // Event when a key is pressed
             @Override
@@ -51,6 +61,11 @@ public class GamePanel extends JPanel implements ActionListener {
                         break;
                     case KeyEvent.VK_D:
                         player.Move(Player.PlayerDirections.RIGHT); // D Keypress
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        manager.startGame(null);
+                        t.stop();
+                        repaint();
                         break;
                 }
             }
@@ -84,7 +99,7 @@ public class GamePanel extends JPanel implements ActionListener {
      * Checks for collisions between the player and walls/objects
      */
     public void checkCollision() {
-        // TODO: Move player back if hitting wall
+        // TODO: Move player back if hitting object
     }
 
     public void paintComponent(Graphics g) {
@@ -94,10 +109,29 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (player.getX() > 500) {
-            player.setX(0);
-            manager.changeLocation("Place");
-            t.stop();   // IMPORTANT LINE: Stops the old timer so game doesn't lag out 
+        if (edgeMap.containsKey("0") && player.getX() < 10) {
+            t.stop();
+            player.setX(600 - 10 - player.getWidth());
+            manager.changeLocation(edgeMap.get("0"));
+            
+        }
+        else if (edgeMap.containsKey("1") && player.getY() < 10) {
+            t.stop();
+            player.setY(600 - 10 - player.getHeight() - player.getHeight() / 2);
+            manager.changeLocation(edgeMap.get("1"));
+            
+        }
+        else if (edgeMap.containsKey("2") && player.getX() > 500) {
+            t.stop();
+            player.setX(50);
+            manager.changeLocation(edgeMap.get("2"));
+            //t.stop();   // IMPORTANT LINE: Stops the old timer so game doesn't lag out 
+        }
+        else if (edgeMap.containsKey("3") && player.getY() > 470) {
+            t.stop();
+            player.setY(50);
+            manager.changeLocation(edgeMap.get("3"));
+            //t.stop();
         }
         repaint();
     }

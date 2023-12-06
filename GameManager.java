@@ -2,6 +2,7 @@ import javax.swing.*;
 import components.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 /**
  * This class manages the current JFrame's panel. Essentially, this is the train station where all locations/menus
@@ -45,7 +46,9 @@ public class GameManager {
      * @param gameWindow JFrame of the game
      */
     public void startGame(String location) {
+        gameWindow.getContentPane().removeAll();
         gameWindow.add(loadMenu());
+        gameWindow.revalidate();
     }
     /**
      * Changes the location currently shown on the screen
@@ -83,12 +86,22 @@ public class GameManager {
         c.ipady = 100;
         menu.add(title, c);
 
+        JLabel nameL = new JLabel();
+        nameL.setFont(new Font("Comic Sans",Font.PLAIN, 20));
+        c.fill = GridBagConstraints.PAGE_START;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.ipady = 100;
+        menu.add(nameL, c);
+
         // New Game Button:
         JButton startBt = new JButton("New Game");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weighty = 1.0;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         c.ipady = 0;
         // This format is how Buttons perform functions and other commands
         startBt.addActionListener(new ActionListener() {
@@ -101,18 +114,50 @@ public class GameManager {
         });
         menu.add(startBt, c);
         
+        // Save Game Button:
+        JButton saveBt = new JButton("Save Game");
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 3;
+        c.ipady = 0;
+        // This format is how Buttons perform functions and other commands
+        saveBt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO : Load from file
+                layout.saveGame("test");
+            }
+
+        });
+        menu.add(saveBt, c);
+
         // Load Game Button:
         JButton loadBt = new JButton("Load Game");
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weighty = 1.0;
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 4;
         c.ipady = 0;
         // This format is how Buttons perform functions and other commands
-        startBt.addActionListener(new ActionListener() {
+        loadBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO : Load from file
+                JFileChooser chooser = new JFileChooser();
+                // invoke the showsSaveDialog function to show the save dialog
+                int r = chooser.showOpenDialog(null);
+                // if the user selects a file
+                if (r == JFileChooser.APPROVE_OPTION) {
+                    // set the label to the path of the selected file
+                    String savedGame = chooser.getSelectedFile().getAbsolutePath();
+                    layout.loadGame(savedGame);
+                    System.out.println(layout.getStart());
+                    changeLocation(layout.getStart());
+                }
+                // if the user cancelled the operation
+                else
+                    nameL.setText("the user cancelled the operation");
             }
 
         });

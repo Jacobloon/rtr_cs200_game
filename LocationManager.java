@@ -34,14 +34,16 @@ public class LocationManager {
   public GamePanel getLocation(String name, Player user) {
     LocationDescription desc = gameLayout.getDescriptions().get(name);
     Set<String> edges = gameLayout.getConnections().get(name);
-    //String prop = desc.getProperty();
+    String prop = desc.getProperty();
+
+    System.out.println(edges); // TEST
     
     // Menu panel 
-    GamePanel panel = new GamePanel(new GridBagLayout(), manager, user, name);
+    GamePanel panel = new GamePanel(new GridBagLayout(), manager, user, name, edges);
     GridBagConstraints c = new GridBagConstraints();
     
     // Basic Game Title: can change to an image later if we get ambitious
-    JLabel title = new JLabel(name);
+    JLabel title = new JLabel(name + " : " + prop);
     title.setFont(new Font("Comic Sans",Font.PLAIN, 40));
     c.fill = GridBagConstraints.PAGE_START;
     c.weightx = 1.0;
@@ -50,8 +52,7 @@ public class LocationManager {
     c.gridy = 0;
     c.ipady = 100;
     panel.add(title, c);
-    
+
     return panel;
   }
-  
 }

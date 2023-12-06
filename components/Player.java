@@ -128,4 +128,11 @@ public class Player {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+
+    public int getWidth() {
+        return this.pWidth;
+    }
+    public int getHeight() {
+        return this.pHeight;
+    }
 }

@@ -1,23 +1,33 @@
-graveyard, road
-road, clock tower
-road, saloon
-road, alley
-road, pasture
-clock tower, road
-saloon, road
-saloon, alleyway
-alleyway, saloon
-alleyway, road
-alleyway, valley
-valley, alleyway
-valley, pasture
-valley, city
-pasture, road
-pasture, valley
-pasture, barn
-pasture, tracks
-barn, pasture
-tracks, pasture
-tracks, city
-city, tracks
-city, valley
+graveyard,road,2
+road,pasture,0
+road,clocktower,1
+road,alleyway,2
+road,saloon,3
+clocktower,tracks,0
+clocktower,valley,2
+clocktower,road,3
+saloon,barn,0
+saloon,road,1
+saloon,backdoor,2
+backdoor,saloon,0
+backdoor,alleyway,1
+alleyway,road,0
+alleyway,valley,1
+alleyway,barn,2
+alleyway,backdoor,3
+valley,clocktower,0
+valley,city,1
+valley,pasture,2
+valley,alleyway,3
+pasture,valley,0
+pasture,tracks,1
+pasture,road,2
+pasture,barn,3
+tracks,city,0
+tracks,clocktower,2
+tracks,pasture,3
+city,tracks,2
+city,valley,3
+barn,alleyway,0
+barn,pasture,1
+barn,saloon,2
