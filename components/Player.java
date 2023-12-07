@@ -16,7 +16,9 @@ public class Player {
     
     private int x = 28;
     private int y = 190;
-    private int speed = 10; // Determines how fast the player moves
+    
+    // Determines how fast the player moves
+    private int speed = 10; 
     private int velX = 0;
     private int velY = 0;
 
@@ -45,6 +47,9 @@ public class Player {
         g.fillRect(x, y, pWidth, pHeight); 
     }
 
+    /**
+     * Checks if the player is colliding with a wall or object
+     */
     // TODO: Put in GamePanel??
     public void checkCollision() {
         if (getY() <= 0) {
@@ -61,6 +66,10 @@ public class Player {
         }
     }
 
+    /**
+     * Changes position based on keyboard input
+     * @param direction PlayerDirections keyboard options
+     */
     // TODO: Change to KeyBindings for smoother movement?
     public void Move(PlayerDirections direction) {
         switch (direction) {
@@ -78,61 +87,50 @@ public class Player {
             break;
         }
     }
+
     
-    /**
-     * Returns player's x position
-     * @return int x position
-     */
+    // GETTER AND SETTER METHODS ===========================================================
+
     public int getX() {
       return this.x;
     }
-
-    /**
-     * Sets the player's x position
-     */
     public void setX(int x) {
       this.x = x;
     }
-    /**
-     * Returns player's y position
-     * @return int y position
-     */
     public int getY() {
       return this.y;
     }
-
-    /**
-     * Sets the player's y position
-     */
     public void setY(int y) {
       this.y = y;
-    }
-
-    // TODO: Smooth movement
-    public void setVelX(int velX) {
-        this.velX = velX;
-    }
-    public void setVelY(int velY) {
-        this.velY = velY;
     }
     public int getVelX() {
         return this.velX;
     }
+    public void setVelX(int velX) {
+        this.velX = velX;
+    }
     public int getVelY() {
         return this.velY;
     }
-
+    public void setVelY(int velY) {
+        this.velY = velY;
+    }
     public int getSpeed() {
         return this.speed;
     }
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-
     public int getWidth() {
         return this.pWidth;
     }
+    public void setWidth(int pWidth) {
+        this.pWidth = pWidth;
+    }
     public int getHeight() {
         return this.pHeight;
+    }
+    public void setHeight(int pHeight) {
+        this.pHeight = pHeight;
     }
 }
