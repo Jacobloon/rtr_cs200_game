@@ -1,9 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.*;
 import components.*;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.ArrayList;
 
 /**
  * Extended JPanel class to add ActionListener components so Players
@@ -19,6 +22,16 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     Player player;
 
+    /**
+     * Revolver object if it is added to the scene
+     */
+    Revolver revolver;
+    
+    /**
+     * List of shot bullets
+     */
+    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+    
     /**
      * Timer to allow characters to move
      */
@@ -95,6 +108,38 @@ public class GamePanel extends JPanel implements ActionListener {
                 }
             }
         });
+        addMouseListener( new MouseListener() {
+            // Shoots the bullets
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // TODO Auto-generated method stub
+            	if (player.getRevolver()) {
+            		PointerInfo a = MouseInfo.getPointerInfo();
+            		Point b = a.getLocation();
+            		int mouseX = (int) b.getX();
+            		int mouseY = (int) b.getY();
+            		Bullet shot = new Bullet(player, mouseX, mouseY); 
+            		bullets.add(shot);
+            	}
+            }
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+        });
+        
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         setBackground(new Color(16, 16, 16));
@@ -103,17 +148,36 @@ public class GamePanel extends JPanel implements ActionListener {
     }
     
     /**
-     * Checks for collisions between the player and walls/objects
+     * Checks for collisions between Bullets and other objects
      */
-    public void checkCollision() {
-        // TODO: Move player back if hitting object
+    public void checkCollision(Bullet shot) {
+        if (shot.getY() <= 0 || shot.getY() >= 600 || shot.getX() <= 0 || shot.getX() >= 600) {
+            bullets.remove(shot);
+        }
     }
 
+    /**
+     * Paints the given components on the screen
+     * @param g Graphics pane
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         player.draw(g);
+        if (this.revolver != null) {
+        	revolver.draw(g);
+        }
+        for (int i=0;i<bullets.size();i++) {
+        	Bullet shot = bullets.get(i);
+        	shot.draw(g);
+        	checkCollision(shot);
+        }
     }
-
+    
+    public void addRevolver(Revolver rev) {
+    	this.revolver = rev;
+    }
+    
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (edgeMap.containsKey("0") && player.getX() < 10) {
@@ -141,10 +205,5 @@ public class GamePanel extends JPanel implements ActionListener {
             //t.stop();
         }
         repaint();
-    }
-
-    // TODO: returns false when panel is to be closed
-    public boolean isActive() {
-        return true;
     }
 }

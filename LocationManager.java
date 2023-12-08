@@ -1,7 +1,10 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import components.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -52,7 +55,16 @@ public class LocationManager {
     c.gridy = 0;
     c.ipady = 100;
     panel.add(title, c);
-
+    
+    
+    // Loads revolver if it is found
+    if (!user.getRevolver() && prop.equals("REVOLVER")) {
+    	panel.remove(title);
+    	Revolver rev = new Revolver(user);
+    	panel.addRevolver(rev);
+    }
+    
+    
     return panel;
   }
 }

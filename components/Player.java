@@ -31,7 +31,8 @@ public class Player {
     private int pWidth = 44;
     private int pHeight = 64;
 
-
+    private boolean hasRevolver = false;
+    
     private BufferedImage sprite;
 
 
@@ -101,7 +102,15 @@ public class Player {
             break;
         }
     }
+    
 
+    public void setRevolver(boolean has) {
+    	this.hasRevolver = has;
+    	System.out.println("Has Revolver");
+    }
+    public boolean getRevolver() {
+    	return this.hasRevolver;
+    }
     
     // GETTER AND SETTER METHODS ===========================================================
 
