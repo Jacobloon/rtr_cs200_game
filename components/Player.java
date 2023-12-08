@@ -1,6 +1,11 @@
 package components;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import components.*;
 
@@ -18,13 +23,17 @@ public class Player {
     private int y = 190;
     
     // Determines how fast the player moves
-    private int speed = 10; 
+    private int speed = 7; 
     private int velX = 0;
     private int velY = 0;
 
     // Player Size variables
-    private int pWidth = 80;
-    private int pHeight = 80;
+    private int pWidth = 44;
+    private int pHeight = 64;
+
+
+    private BufferedImage sprite;
+
 
     /**
      * Constructor for Player class that will store data that needs to be
@@ -32,6 +41,12 @@ public class Player {
      */
     public Player() {
         // TODO: Add info
+        try {
+            sprite = ImageIO.read(new File("sprites/boney.png"));
+        }
+        catch (IOException e) {
+            System.out.println("Cannot load player sprite");
+        }
     }
 
 
@@ -44,7 +59,7 @@ public class Player {
         y+=velY;
         checkCollision();
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, pWidth, pHeight); 
+        g.drawImage(sprite, x, y, null);
     }
 
     /**
@@ -55,14 +70,14 @@ public class Player {
         if (getY() <= 0) {
             setY(0);
         }
-        else if (getY() >= 600 - pHeight - (pHeight / 2)) { // TODO: Panel Height
-            setY(600 - pHeight - (pHeight / 2));            // TODO: Fix half of player going off bottom screen
+        else if (getY() >= 600 - 10 - pHeight - (pHeight / 2)) { // TODO: Panel Height
+            setY(600 - 10 - pHeight - (pHeight / 2));            // TODO: Fix half of player going off bottom screen
         }
         if (getX() <= 0) {
             setX(0);
         }
-        else if (getX() >= 600 - pWidth) { // TODO: Panel Height
-            setX(600 - pWidth);           
+        else if (getX() >= 600 - pWidth - (pWidth / 2)) { // TODO: Panel Height
+            setX(600 - pWidth - (pWidth / 2));           
         }
     }
 
@@ -70,7 +85,6 @@ public class Player {
      * Changes position based on keyboard input
      * @param direction PlayerDirections keyboard options
      */
-    // TODO: Change to KeyBindings for smoother movement?
     public void Move(PlayerDirections direction) {
         switch (direction) {
         case UP:

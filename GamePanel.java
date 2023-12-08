@@ -34,7 +34,14 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     HashMap<String, String> edgeMap = new HashMap<String, String>();
 
-   //TODO This takes in a location description to allow locations travel x and ys instead of name
+    /**
+     * Creates the panels on which the game is played, changed per location
+     * @param layout layout information
+     * @param manager GameManager
+     * @param player Current Player
+     * @param name Name of the location
+     * @param edges Edges leading out of the location
+     */
     public GamePanel(LayoutManager layout, GameManager manager, Player player, String name, Set<String> edges) {
         super(layout);
         this.manager = manager;
@@ -111,25 +118,25 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (edgeMap.containsKey("0") && player.getX() < 10) {
             t.stop();
-            player.setX(600 - 10 - player.getWidth());
+            player.setX(600 - 60 - player.getWidth());
             manager.changeLocation(edgeMap.get("0"));
             
         }
         else if (edgeMap.containsKey("1") && player.getY() < 10) {
             t.stop();
-            player.setY(600 - 10 - player.getHeight() - player.getHeight() / 2);
+            player.setY(600 - 70 - player.getHeight());
             manager.changeLocation(edgeMap.get("1"));
             
         }
         else if (edgeMap.containsKey("2") && player.getX() > 500) {
             t.stop();
-            player.setX(50);
+            player.setX(20);
             manager.changeLocation(edgeMap.get("2"));
             //t.stop();   // IMPORTANT LINE: Stops the old timer so game doesn't lag out 
         }
         else if (edgeMap.containsKey("3") && player.getY() > 470) {
             t.stop();
-            player.setY(50);
+            player.setY(20);
             manager.changeLocation(edgeMap.get("3"));
             //t.stop();
         }
