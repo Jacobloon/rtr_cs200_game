@@ -1,7 +1,9 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import components.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 /**
@@ -103,6 +105,7 @@ public class GameManager {
         c.gridx = 0;
         c.gridy = 2;
         c.ipady = 0;
+        
         // This format is how Buttons perform functions and other commands
         startBt.addActionListener(new ActionListener() {
             @Override

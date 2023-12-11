@@ -2,6 +2,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import components.*;
 import java.util.HashMap;
@@ -37,6 +42,10 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     Timer t;
 
+    BufferedImage bg;
+
+    boolean shotPause;
+
     /**
      * Game manager class for our panel
      */
@@ -57,13 +66,25 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     public GamePanel(LayoutManager layout, GameManager manager, Player player, String name, Set<String> edges) {
         super(layout);
+        try {
+            if (name.equals("graveyard")) {
+                this.bg = ImageIO.read(new File("sprites/graveyard.png"));
+            }
+            else {
+                this.bg = ImageIO.read(new File("sprites/sand.png"));
+            }
+        }
+        catch (IOException e) {
+            System.out.println("Error loading sand");
+        }
         this.manager = manager;
         for (String edge : edges) {
             String[] data = edge.split(":");
             this.edgeMap.put(data[1], data[0]);
         }
         this.player = player;
-        
+        this.shotPause = false;
+
         addKeyListener(new KeyAdapter() {
             // Event when a key is pressed
             @Override
@@ -88,10 +109,36 @@ public class GamePanel extends JPanel implements ActionListener {
                         repaint();
                         break;
                 }
+                // Bullet direction
+                if (!shotPause && player.getRevolver()) {
+                    switch (KeyCode) {
+                        case KeyEvent.VK_LEFT:
+                            Bullet shot = new Bullet(player, 0); 
+                            bullets.add(shot);
+                            shotPause = true;
+                            break;
+                        case KeyEvent.VK_UP:
+                            shot = new Bullet(player, 1); 
+                            bullets.add(shot);
+                            shotPause = true;
+                            break;
+                        case KeyEvent.VK_RIGHT:
+                            shot = new Bullet(player, 2); 
+                            bullets.add(shot);
+                            shotPause = true;
+                            break;
+                        case KeyEvent.VK_DOWN:
+                            shot = new Bullet(player, 3); 
+                            bullets.add(shot);
+                            shotPause = true;
+                            break;            
+                    }
+                }
             }
             // Event when a key is released
             @Override
             public void keyReleased(KeyEvent e) {
+                // Allows movement again
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W:
                         player.setVelY(0);
@@ -106,38 +153,22 @@ public class GamePanel extends JPanel implements ActionListener {
                         player.setVelX(0);
                         break;
                 }
+                // Allows another shot in a direction
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_LEFT:
+                        shotPause = false;
+                        break;
+                    case KeyEvent.VK_UP:
+                        shotPause = false;
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        shotPause = false;
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        shotPause = false;
+                        break;            
+                }
             }
-        });
-        addMouseListener( new MouseListener() {
-            // Shoots the bullets
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // TODO Auto-generated method stub
-            	if (player.getRevolver()) {
-            		PointerInfo a = MouseInfo.getPointerInfo();
-            		Point b = a.getLocation();
-            		int mouseX = (int) b.getX();
-            		int mouseY = (int) b.getY();
-            		Bullet shot = new Bullet(player, mouseX, mouseY); 
-            		bullets.add(shot);
-            	}
-            }
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
         });
         
         setFocusable(true);
@@ -162,6 +193,7 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.drawImage(this.bg, 0, 0, this);
         player.draw(g);
         if (this.revolver != null) {
         	revolver.draw(g);

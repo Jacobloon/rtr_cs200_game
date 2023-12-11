@@ -14,6 +14,8 @@ public class GameLayout {
     private HashMap<String, LocationDescription> descriptions;
     // starting position on a loaded game
     private String start = "";
+    // Location of the revolver on the map
+    private String revolverLocation;
 
     /**
      * Default constructor with no starting info given
@@ -62,6 +64,10 @@ public class GameLayout {
                 String property = (i == revolverPos) ? "REVOLVER" : "NONE";
                 LocationDescription place = new LocationDescription("Place", locations.get(i), property);
                 this.descriptions.put(locations.get(i), place);
+                // SAVE REVOLVER LOCATION STRING =========================
+                if (i == revolverPos) {
+                    this.revolverLocation = locations.get(i);
+                }
             }
             fileS.close();
             // TODO: Add connections
@@ -128,7 +134,7 @@ public class GameLayout {
      * 
      * @return iterator of the locations
      */
-    public Iterator locationIterator() {
+    public Iterator<String> locationIterator() {
         return connections.keySet().iterator();
     }
 
@@ -137,7 +143,7 @@ public class GameLayout {
      * 
      * @return iterator of the connections, null if empty
      */
-    public Iterator connectionIterator(String location) {
+    public Iterator<String> connectionIterator(String location) {
         return connections.get(location).iterator();
     }
 
@@ -182,5 +188,12 @@ public class GameLayout {
      */
     public String getStart() {
         return this.start;
+    }
+
+    /**
+     * Returns the string name of the revolver's location
+     */
+    public String getRevLocation() {
+        return this.revolverLocation;
     }
 }

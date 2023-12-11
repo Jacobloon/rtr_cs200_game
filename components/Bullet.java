@@ -1,12 +1,5 @@
 package components;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import components.*;
 
 /**
  * Class used to draw and define the bullets
@@ -22,14 +15,10 @@ public class Bullet{
     private int rWidth = 5;
     private int rHeight = 5;
     
-    private int mouseX;
-    private int mouseY;
-    private double xVel;
-    private double yVel;
-    private double xDif;
-    private double yDif;
-    private double bulletVelocity = 10.0; 
-    
+    private int xVel = 0;
+    private int yVel = 0;
+    private int bulletVelocity = 10; 
+
     /**
      * Reference to the player object to check for collision
      */
@@ -39,19 +28,25 @@ public class Bullet{
     /**
      * Constructor for the bullet
      */
-    public Bullet(Player player, int mouseX, int mouseY) {
+    public Bullet(Player player, int direction) {
     	this.player = player;
-    	this.x = player.getX();
-    	this.y = player.getY();
-    	this.mouseX = mouseX;
-    	this.mouseY = mouseY;
-    	this.xDif = (mouseX * 1.0 - x) ;
-    	this.yDif = (mouseY * 1.0 - y) ;
-    	
-    	double max = 1.0 * Math.max(mouseX, mouseY);
-    	double speedChange = bulletVelocity / max;
-    	this.xVel = xDif * 3.0;
-    	this.yVel = yDif * 3.0;
+    	this.x = this.player.getX() + (this.player.getWidth()/2);
+    	this.y = this.player.getY() + (this.player.getHeight()/2);
+
+    	switch (direction) {
+            case 0:
+                this.xVel = -1 * this.bulletVelocity;
+                break;
+            case 1:
+                this.yVel = -1 * this.bulletVelocity;
+                break;
+            case 2:
+                this.xVel = this.bulletVelocity;
+                break;
+            case 3:
+                this.yVel = this.bulletVelocity;
+                break;
+        }
     }
     
     /**
@@ -59,7 +54,6 @@ public class Bullet{
      * @param g Graphics panel
      */
     public void draw(Graphics g) {
-    	System.out.println(xVel + " " + yVel);
         x += xVel;
         y += yVel;
     	

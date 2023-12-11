@@ -1,13 +1,9 @@
 package components;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import components.*;
 
 /**
  * Class used to draw and define the player within our game
@@ -19,8 +15,8 @@ public class Player {
       UP, DOWN, LEFT, RIGHT
     }
     
-    private int x = 28;
-    private int y = 190;
+    private int x = 250;
+    private int y = 250;
     
     // Determines how fast the player moves
     private int speed = 7; 
@@ -67,6 +63,7 @@ public class Player {
      * Checks if the player is colliding with a wall or object
      */
     // TODO: Put in GamePanel??
+    // Could be put in a parent class for all entitys: Entity()
     public void checkCollision() {
         if (getY() <= 0) {
             setY(0);
@@ -103,14 +100,6 @@ public class Player {
         }
     }
     
-
-    public void setRevolver(boolean has) {
-    	this.hasRevolver = has;
-    	System.out.println("Has Revolver");
-    }
-    public boolean getRevolver() {
-    	return this.hasRevolver;
-    }
     
     // GETTER AND SETTER METHODS ===========================================================
 
@@ -156,4 +145,11 @@ public class Player {
     public void setHeight(int pHeight) {
         this.pHeight = pHeight;
     }
+    public void setRevolver(boolean has) {
+    	this.hasRevolver = has;
+    }
+    public boolean getRevolver() {
+    	return this.hasRevolver;
+    }
+    
 }
