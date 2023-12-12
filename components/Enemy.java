@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.util.*;
 
 /**
  * This is the class to create enemy objects on the playing field
@@ -53,8 +54,9 @@ public class Enemy {
      * Constructor for the object
      */
     public Enemy(Player player) {
-        this.x = 250;
-        this.y = 250;
+    	Random rand = new Random();
+        this.x = 175 + rand.nextInt(150);
+        this.y = 175 + rand.nextInt(150);
         this.width = 44;
         this.height = 64;
         this.speed = 3;

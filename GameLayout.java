@@ -22,6 +22,8 @@ public class GameLayout {
     private Player player;
     // Current Location
     private String curLocation;
+    // Number of enemies left
+    private int enemies;
 
     /**
      * Default constructor with no starting info given
@@ -31,6 +33,7 @@ public class GameLayout {
         this.descriptions = new HashMap<String, LocationDescription>();
         this.player = player;
         this.newGame();
+        this.enemies = getNumEnemies();
     }
 
     /**
@@ -43,6 +46,7 @@ public class GameLayout {
         this.connections = connections;
         this.descriptions = descriptions;
         this.start = start;
+        this.enemies = getNumEnemies();
     }
 
     /**
@@ -53,7 +57,17 @@ public class GameLayout {
     public LocationDescription getDescription(String name) {
         return descriptions.get(name);
     }
-
+    
+    public int getNumEnemies() {
+    	int tempNum = 0;
+    	for (LocationDescription loc : this.descriptions.values()) {
+    		if (loc.getProperty().equals("ENEMY")) {
+    			tempNum++;
+    		}
+    	}
+    	return tempNum;
+    }
+    
     // TODO: Complete
     public void newGame() {
         try {

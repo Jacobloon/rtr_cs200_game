@@ -91,7 +91,7 @@ public class GameManager {
         c.weighty = 1.0;
         c.gridx = 0;
         c.gridy = 0;
-        c.ipady = 100;
+        c.ipady = 0;
         // Basic Game Title: can change to an image later if we get ambitious
         BufferedImage titleImg;
         try {
@@ -110,7 +110,7 @@ public class GameManager {
         c.weighty = 1.0;
         c.gridx = 0;
         c.gridy = 1;
-        c.ipady = 100;
+        c.ipady = 10;
         menu.add(nameL, c);
 
         // Chooses Continue Game or New Game whether it's a pause menu or not
@@ -206,6 +206,7 @@ public class GameManager {
             }
 
         });
+        menu.setBackground(Color.decode("#058AFF"));
         menu.add(loadBt, c);
         return menu;
     }
