@@ -8,11 +8,12 @@ JAVA JRE Version 1.8.*
 
 
 ## Running the Game
-
+Download the code, then extract the ZIP folder.  
+Run the GameDriver.java file to begin the game.
 
 ## Game Instructions
-**MOVEMENT:**
-W: Move up
-A: Move left
-S: Move down
-D: Move right
+**MOVEMENT:**  
+Use WASD to move Up, Left, Down, and Right 
+  
+**SHOOTING:**  
+Use the arrow keys to shoot in each direction  
