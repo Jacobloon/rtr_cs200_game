@@ -66,6 +66,11 @@ public class GamePanel extends JPanel implements ActionListener {
     HashMap<String, String> edgeMap = new HashMap<String, String>();
 
     private String name;
+
+    /**
+     * Boolean to show if map is visible
+     */
+    private boolean mapIsVisible = false;
     /**
      * Creates the panels on which the game is played, changed per location
      * @param layout layout information
@@ -118,6 +123,9 @@ public class GamePanel extends JPanel implements ActionListener {
                         manager.startMenu(true);
                         t.stop();
                         break;
+                    case KeyEvent.VK_M:
+                       mapIsVisible = true;
+                       break;
                 }
                 // Bullet direction
                 if (!shotPause && player.getRevolver()) {
@@ -161,6 +169,10 @@ public class GamePanel extends JPanel implements ActionListener {
                         break;
                     case KeyEvent.VK_D:
                         player.setVelX(0);
+                        break;
+                    case KeyEvent.VK_M:
+                        mapIsVisible = false;
+                        repaint();
                         break;
                 }
                 // Allows another shot in a direction
@@ -210,12 +222,26 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
+    public void drawMap(Graphics g) throws IOException {
+      BufferedImage image = ImageIO.read(new File("img.jpg"));
+      super.paintComponent(g);
+      g.drawImage(image, 0, 0, null);
+    }
+
     /**
      * Paints the given components on the screen
      * @param g Graphics pane
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (mapIsVisible){
+          try{
+          drawMap(g);
+          }
+          catch (IOException e){
+            System.out.println("Error : " + e);
+          }
+        }
         g.drawImage(this.bg, 0, 0, this);
         player.draw(g);
         if (this.revolver != null) {
