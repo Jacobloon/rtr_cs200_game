@@ -91,10 +91,15 @@ public class LocationManager {
     GamePanel panel = new GamePanel(null, manager, user, name, edges);
     //GridBagConstraints c = new GridBagConstraints();
     
-    
+    // Loads enemies if present
+    if (prop.equals("ENEMY")) {
+      Enemy enemy = new Enemy(user);
+      panel.addEnemy(enemy);
+      //desc.setProperty("NONE"); // TODO: Check if this removes enemy upon death
+    }
+
     // Loads revolver if it is found
     if (!user.getRevolver() && prop.equals("REVOLVER")) {
-    	//panel.remove(title);
     	Revolver rev = new Revolver(user);
     	panel.addRevolver(rev);
     }

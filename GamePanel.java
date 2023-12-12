@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +31,11 @@ public class GamePanel extends JPanel implements ActionListener {
     Revolver revolver;
     
     /**
+     * Enemy object if present
+     */
+    Enemy enemy;
+
+    /**
      * List of shot bullets
      */
     ArrayList<Bullet> bullets = new ArrayList<Bullet>();
@@ -42,8 +45,14 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     Timer t;
 
+    /**
+     * Game panel's background image
+     */
     BufferedImage bg;
 
+    /**
+     * If player is on a shot pause or not. Prevents extreme rapid fire
+     */
     boolean shotPause;
 
     /**
@@ -56,6 +65,7 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     HashMap<String, String> edgeMap = new HashMap<String, String>();
 
+    private String name;
     /**
      * Creates the panels on which the game is played, changed per location
      * @param layout layout information
@@ -66,6 +76,7 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     public GamePanel(LayoutManager layout, GameManager manager, Player player, String name, Set<String> edges) {
         super(layout);
+        this.name = name;
         try {
             if (name.equals("graveyard")) {
                 this.bg = ImageIO.read(new File("sprites/graveyard.png"));
@@ -104,9 +115,8 @@ public class GamePanel extends JPanel implements ActionListener {
                         player.Move(Player.PlayerDirections.RIGHT); // D Keypress
                         break;
                     case KeyEvent.VK_ESCAPE:
-                        manager.startGame(null);
+                        manager.startMenu(true);
                         t.stop();
-                        repaint();
                         break;
                 }
                 // Bullet direction
@@ -182,8 +192,21 @@ public class GamePanel extends JPanel implements ActionListener {
      * Checks for collisions between Bullets and other objects
      */
     public void checkCollision(Bullet shot) {
-        if (shot.getY() <= 0 || shot.getY() >= 600 || shot.getX() <= 0 || shot.getX() >= 600) {
+        int sX = shot.getX();
+        int sY = shot.getY();
+        if (sY <= 0 || sY >= 600 || sX <= 0 || sX >= 600) {
             bullets.remove(shot);
+        }
+        if (this.enemy != null) {
+            int eX = enemy.getX();
+            int eY = enemy.getY();
+            if (sY >= eY && sY <= eY + enemy.getHeight() && sX >= eX && sX <= eX + enemy.getWidth()) {
+                this.enemy.getShot();
+                LocationDescription loc = manager.layout.getDescriptions().get(name); // TODO: Initialize location description above in constructor
+                loc.setProperty("NONE");
+                this.enemy = null;
+                bullets.remove(shot);
+            }
         }
     }
 
@@ -198,6 +221,9 @@ public class GamePanel extends JPanel implements ActionListener {
         if (this.revolver != null) {
         	revolver.draw(g);
         }
+        if (this.enemy != null) {
+        	enemy.draw(g);
+        }
         for (int i=0;i<bullets.size();i++) {
         	Bullet shot = bullets.get(i);
         	shot.draw(g);
@@ -205,10 +231,21 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
     
+    /**
+     * Adds a revolver object to the panel
+     * @param rev
+     */
     public void addRevolver(Revolver rev) {
     	this.revolver = rev;
     }
     
+    /**
+     * Adds an enemy to the panel
+     * @param enemy
+     */
+    public void addEnemy(Enemy enemy) {
+        this.enemy = enemy;
+    }
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -238,4 +275,5 @@ public class GamePanel extends JPanel implements ActionListener {
         }
         repaint();
     }
+
 }

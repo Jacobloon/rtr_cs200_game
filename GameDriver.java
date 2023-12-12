@@ -33,7 +33,7 @@ public class GameDriver{
         this.gameSystem = new GameManager(gameWindow);
 
         // Window quality changes; title of window, initial size of window, and makes it visible
-        this.gameSystem.startGame(null);
+        this.gameSystem.startMenu(false);
 
         // Sets the current panel to menu to start the game
         gameWindow.setVisible(true);

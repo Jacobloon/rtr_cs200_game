@@ -15,20 +15,23 @@ public class Player {
       UP, DOWN, LEFT, RIGHT
     }
     
-    private int x = 250;
-    private int y = 250;
+    private int x;
+    private int y;
     
     // Determines how fast the player moves
-    private int speed = 7; 
-    private int velX = 0;
-    private int velY = 0;
+    private int speed; 
+    private int velX;
+    private int velY;
 
     // Player Size variables
-    private int pWidth = 44;
-    private int pHeight = 64;
+    private int pWidth;
+    private int pHeight;
+
+    // Number of hit points the player has left
+    private int life;
 
     private boolean hasRevolver = false;
-    
+     
     private BufferedImage sprite;
 
 
@@ -37,7 +40,15 @@ public class Player {
      * saved and reloaded.
      */
     public Player() {
-        // TODO: Add info
+        this.x = 250;
+        this.y = 250;
+        this.speed = 7;
+        this.velX = 0;
+        this.velY = 0;
+        this.pWidth = 44;
+        this.pHeight = 64;
+        this.life = 3;
+
         try {
             sprite = ImageIO.read(new File("sprites/boney.png"));
         }
@@ -150,6 +161,12 @@ public class Player {
     }
     public boolean getRevolver() {
     	return this.hasRevolver;
+    }
+    public int getLife() {
+        return this.life;
+    }
+    public void setLife(int life) {
+        this.life = life;
     }
     
 }
