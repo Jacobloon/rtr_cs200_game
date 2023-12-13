@@ -49,7 +49,7 @@ public class GamePanel extends JPanel implements ActionListener {
      * Game panel's background image
      */
     BufferedImage bg;
-
+    BufferedImage map;
     /**
      * If player is on a shot pause or not. Prevents extreme rapid fire
      */
@@ -89,6 +89,7 @@ public class GamePanel extends JPanel implements ActionListener {
             else {
                 this.bg = ImageIO.read(new File("sprites/sand.png"));
             }
+            this.map = ImageIO.read(new File("sprites/map.png"));
         }
         catch (IOException e) {
             System.out.println("Error loading sand");
@@ -124,8 +125,10 @@ public class GamePanel extends JPanel implements ActionListener {
                         t.stop();
                         break;
                     case KeyEvent.VK_M:
-                       mapIsVisible = true;
-                       break;
+                        if (!mapIsVisible) {
+                            mapIsVisible = true;
+                        }
+                        break;
                 }
                 // Bullet direction
                 if (!shotPause && player.getRevolver()) {
@@ -222,26 +225,12 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
-    public void drawMap(Graphics g) throws IOException {
-      BufferedImage image = ImageIO.read(new File("img.jpg"));
-      super.paintComponent(g);
-      g.drawImage(image, 0, 0, null);
-    }
-
     /**
      * Paints the given components on the screen
      * @param g Graphics pane
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (mapIsVisible){
-          try{
-          drawMap(g);
-          }
-          catch (IOException e){
-            System.out.println("Error : " + e);
-          }
-        }
         g.drawImage(this.bg, 0, 0, this);
         player.draw(g);
         if (this.revolver != null) {
@@ -254,6 +243,10 @@ public class GamePanel extends JPanel implements ActionListener {
         	Bullet shot = bullets.get(i);
         	shot.draw(g);
         	checkCollision(shot);
+        }
+        // Map goes on top
+        if (mapIsVisible){
+          g.drawImage(this.map, 90, 90, this);
         }
     }
     
