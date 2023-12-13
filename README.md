@@ -18,3 +18,7 @@ Use WASD to move Up, Left, Down, and Right
   
 **SHOOTING:**  
 Use the arrow keys to shoot in each direction  
+
+**NAVIGATION**  
+M: Open the map  
+N: Check neighbors  
