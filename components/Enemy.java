@@ -45,6 +45,10 @@ public class Enemy {
 
     private int buffer;
 
+    private ArrayList<EnemyBullet> bullets;
+
+    private int shotPause = 0;
+
     /**
      * Reference to the player
      */
@@ -55,15 +59,16 @@ public class Enemy {
      */
     public Enemy(Player player) {
     	Random rand = new Random();
-        this.x = 175 + rand.nextInt(150);
-        this.y = 175 + rand.nextInt(150);
+        this.x = 150 + rand.nextInt(200);
+        this.y = 150 + rand.nextInt(200);
         this.width = 44;
         this.height = 64;
         this.speed = 3;
         this.bDist = 150;
-        this.buffer = 10;
+        this.buffer = 20;
         this.alive = true;
         this.player = player;
+        this.bullets = new ArrayList<EnemyBullet>();
         try {
             sprite = ImageIO.read(new File("sprites/meany.png"));
         }
@@ -79,6 +84,7 @@ public class Enemy {
     public void draw(Graphics g) {
         if (this.alive) {
             moveEnemy();
+            shotPause++;
             g.setColor(Color.WHITE);
             g.drawImage(sprite, x, y, null);
         }
@@ -111,13 +117,23 @@ public class Enemy {
         else if (playerY < this.y){
             this.y -= this.speed;
         }
+        else if (this.shotPause > 50) {
+            if (playerX < this.x) {
+                shootPlayer(0);
+            }
+            else {
+                shootPlayer(2);
+            }
+        }
     }
 
     /**
-     * 
+     * Shoots in the given direction
      */
-    public void shootPlayer() {
-        // TODO: Fire bullets at the player
+    public void shootPlayer(int direction) {
+        EnemyBullet shot = new EnemyBullet(this, direction); 
+        bullets.add(shot);
+        this.shotPause = 0;
     }
 
     /**
@@ -152,5 +168,11 @@ public class Enemy {
     }
     public void setHeight(int height) {
         this.height = height;
+    }
+    public ArrayList<EnemyBullet> getBullets () {
+        return this.bullets;
+    }
+    public void setBullets(ArrayList<EnemyBullet> bullets) {
+        this.bullets = bullets;
     }
 }

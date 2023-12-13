@@ -1,0 +1,15 @@
+Place:graveyard:NONE
+Place:road:ENEMY
+Place:clocktower:NONE
+Place:barn:ENEMY
+Place:city:ENEMY
+Place:saloon:ENEMY
+Place:backdoor:ENEMY
+Place:valley:REVOLVER
+Place:alleyway:ENEMY
+Place:pasture:ENEMY
+Place:tracks:ENEMY
+*
+clocktower
+true
+2

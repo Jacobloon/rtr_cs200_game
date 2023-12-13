@@ -111,7 +111,11 @@ public class Player {
         }
     }
     
-    
+    public void loseLife() {
+        this.life -= 1;
+        System.out.println(this.life);
+    }
+
     // GETTER AND SETTER METHODS ===========================================================
 
     public int getX() {

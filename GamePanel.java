@@ -50,6 +50,11 @@ public class GamePanel extends JPanel implements ActionListener {
      */
     BufferedImage bg;
     BufferedImage map;
+    BufferedImage health;
+    /**
+     * Boolean to show if current location is visible
+     */
+     private boolean curLocationIsVisible = false;
     /**
      * If player is on a shot pause or not. Prevents extreme rapid fire
      */
@@ -71,12 +76,6 @@ public class GamePanel extends JPanel implements ActionListener {
      * Boolean to show if map is visible
      */
     private boolean mapIsVisible = false;
-
-    /**
-     * Boolean to show if current location is visible
-     */
-    
-    private boolean curLocationIsVisible = false;
     /**
      * Creates the panels on which the game is played, changed per location
      * @param layout layout information
@@ -96,6 +95,7 @@ public class GamePanel extends JPanel implements ActionListener {
                 this.bg = ImageIO.read(new File("sprites/sand.png"));
             }
             this.map = ImageIO.read(new File("sprites/map.png"));
+            this.health = ImageIO.read(new File("sprites/health.png"));
         }
         catch (IOException e) {
             System.out.println("Error loading sand");
@@ -133,6 +133,11 @@ public class GamePanel extends JPanel implements ActionListener {
                     case KeyEvent.VK_M:
                         if (!mapIsVisible) {
                             mapIsVisible = true;
+                        }
+                        break;
+                    case KeyEvent.VK_N:
+                        if (!curLocationIsVisible) {
+                            curLocationIsVisible = true;
                         }
                         break;
                 }
@@ -186,7 +191,7 @@ public class GamePanel extends JPanel implements ActionListener {
                     case KeyEvent.VK_N:
                         curLocationIsVisible = false;
                         repaint();
-                        break;
+                        break;  
                 }
                 // Allows another shot in a direction
                 switch (e.getKeyCode()) {
@@ -201,7 +206,7 @@ public class GamePanel extends JPanel implements ActionListener {
                         break;
                     case KeyEvent.VK_DOWN:
                         shotPause = false;
-                        break;            
+                        break;        
                 }
             }
         });
@@ -213,6 +218,34 @@ public class GamePanel extends JPanel implements ActionListener {
         t.start();
     }
     
+    /**
+     * Method to find where to place Location Label using given position
+     * @param int position holds the direction of the connected area
+     * @return int[] returns pixel locatios x,y
+     */
+    public int[] findLabelLocation(int position){
+        int[] returnLocations = new int[2];
+        switch (position) {
+          case 0: //area left
+            returnLocations[0] = 50;
+            returnLocations[1] = 250;
+            break;
+          case 1: //area up
+            returnLocations[0] = 275;
+            returnLocations[1] = 100;
+            break;
+          case 2: //area right
+            returnLocations[0] = 500;
+            returnLocations[1] = 250;
+            break;
+          case 3: //area down
+            returnLocations[0] = 275;
+            returnLocations[1] = 500;
+            break;
+        }
+        return returnLocations;
+      }
+
     /**
      * Checks for collisions between Bullets and other objects
      */
@@ -236,6 +269,25 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     /**
+     * Checks for collisions between EnemyBullets and other objects
+     */
+    public void checkCollisionEnemy(EnemyBullet shot) {
+        // Checks for wall hit
+        int sX = shot.getX();
+        int sY = shot.getY();
+        if (sY <= 0 || sY >= 600 || sX <= 0 || sX >= 600) {
+            enemy.getBullets().remove(shot);
+        }
+        // Checks for Player hit
+        int pX = player.getX();
+        int pY = player.getY();
+        if (sY >= pY && sY <= pY + enemy.getHeight() && sX >= pX && sX <= pX + enemy.getWidth()) {
+            player.loseLife();
+            enemy.getBullets().remove(shot);
+        }
+    }
+
+    /**
      * Paints the given components on the screen
      * @param g Graphics pane
      */
@@ -249,51 +301,46 @@ public class GamePanel extends JPanel implements ActionListener {
         if (this.enemy != null) {
         	enemy.draw(g);
         }
+        // Draws the player's bullets
         for (int i=0;i<bullets.size();i++) {
         	Bullet shot = bullets.get(i);
         	shot.draw(g);
         	checkCollision(shot);
+        }
+        // Draws the enemy's bullets
+        if (enemy != null) {
+            for (int i=0;i<enemy.getBullets().size();i++) {
+                EnemyBullet eShot = enemy.getBullets().get(i);
+                eShot.draw(g);
+                checkCollisionEnemy(eShot);
+            }
         }
         // Map goes on top
         if (mapIsVisible){
           g.drawImage(this.map, 90, 90, this);
         }
         if (curLocationIsVisible){ //Triggers Location to display if n key is pushed
-          g.drawString(manager.layout.getCurLocation(), 275, 300);
-          for (String neighbor : manager.layout.getConnections().get(name)){
-            String [] neighborsAndLocations = neighbor.split(":");
-            int[] panelLocation = findLabelLocation(Integer.parseInt(neighborsAndLocations[1]));
-            g.drawString(neighborsAndLocations[0], panelLocation[0], panelLocation[1]);
+            g.drawString(manager.layout.getCurLocation(), 275, 300);
+            for (String neighbor : manager.layout.getConnections().get(name)){
+              String [] neighborsAndLocations = neighbor.split(":");
+              int[] panelLocation = findLabelLocation(Integer.parseInt(neighborsAndLocations[1]));
+              g.drawString(neighborsAndLocations[0], panelLocation[0], panelLocation[1]);
+            }
           }
+        // Has the player died?
+        if (player.getLife() == 0) {
+            t.stop();
+            manager.loseGame();
+        } 
+        else {
+            for (int i=1;i<=player.getLife();i++) {
+                g.drawImage(this.health, 590 - (i * 64), 10, this);
+            }
         }
-    }
-
-    /**
-     * Method to find where to place Location Label using given position
-     * @param int position holds the direction of the connected area
-     * @return int[] returns pixel locatios x,y
-     */
-    public int[] findLabelLocation(int position){
-      int[] returnLocations = new int[2];
-      switch (position) {
-        case 0: //area left
-          returnLocations[0] = 50;
-          returnLocations[1] = 250;
-          break;
-        case 1: //area up
-          returnLocations[0] = 275;
-          returnLocations[1] = 100;
-          break;
-        case 2: //area right
-          returnLocations[0] = 500;
-          returnLocations[1] = 250;
-          break;
-        case 3: //area down
-          returnLocations[0] = 275;
-          returnLocations[1] = 500;
-          break;
-      }
-      return returnLocations;
+        // All enemies defeated?
+        if (manager.layout.getNumEnemies() == 0) {
+            manager.winGame();
+        }
     }
     
     /**
@@ -330,13 +377,11 @@ public class GamePanel extends JPanel implements ActionListener {
             t.stop();
             player.setX(20);
             manager.changeLocation(edgeMap.get("2"));
-            //t.stop();   // IMPORTANT LINE: Stops the old timer so game doesn't lag out 
         }
         else if (edgeMap.containsKey("3") && player.getY() > 470) {
             t.stop();
             player.setY(20);
             manager.changeLocation(edgeMap.get("3"));
-            //t.stop();
         }
         repaint();
     }

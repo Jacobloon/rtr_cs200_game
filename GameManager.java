@@ -36,6 +36,11 @@ public class GameManager {
     // TODO
     LocationManager locater;
     
+    GameManager manager = this;
+
+    BufferedImage gameOver;
+    BufferedImage gameWon;
+    BufferedImage titleImg;
 
     /**
      * Constructor that takes in the game window to manage
@@ -46,6 +51,14 @@ public class GameManager {
         this.player = new Player();
         this.layout = new GameLayout(this.player);
         this.locater = new LocationManager(this, layout);
+        try {
+            this.gameOver = ImageIO.read(new File("sprites/game_over.png"));
+            this.gameWon = ImageIO.read(new File("sprites/game_won.png"));
+            this.titleImg = ImageIO.read(new File("sprites/title_image.png"));
+        }
+        catch (IOException e) {
+            System.out.println("Could not load menu sprite");
+        }
     }
 
     /**
@@ -73,6 +86,98 @@ public class GameManager {
     }
 
 
+    /**
+     * Hopefully you never see this. Shows the lose game menu if you lose
+     */
+    public void loseGame() {
+        gameWindow.getContentPane().removeAll();
+        JPanel ggPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        JLabel ggLabel = new JLabel(new ImageIcon(gameOver));
+        c.fill = GridBagConstraints.PAGE_START;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        ggPanel.add(ggLabel,c);
+
+        // restart Game Button:
+        /* 
+        JButton restartBt = new JButton("Restart?");
+        c.fill = GridBagConstraints.PAGE_START;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.ipady = 10;
+        // This format is how Buttons perform functions and other commands
+        restartBt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ggPanel.setVisible(false);
+                player = new Player();
+                layout = new GameLayout(player);
+                locater = new LocationManager(manager, layout);
+                layout.newGame();
+                changeLocation("graveyard"); 
+                gameWindow.remove(ggPanel);
+            }
+
+        });
+        restartBt.setLocation(250, 400);
+        ggPanel.add(restartBt, c);
+        */
+
+        gameWindow.add(ggPanel);
+        gameWindow.revalidate();
+    }
+
+    /**
+     * Extremely rewarding. Win game menu
+     */
+    public void winGame() {
+        gameWindow.getContentPane().removeAll();
+        JPanel ggPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
+        JLabel ggLabel = new JLabel(new ImageIcon(gameWon));
+        c.fill = GridBagConstraints.PAGE_START;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        ggPanel.add(ggLabel,c);
+
+        // restart Game Button:
+        /* 
+        JButton restartBt = new JButton("Restart?");
+        c.fill = GridBagConstraints.PAGE_START;
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.ipady = 10;
+        // This format is how Buttons perform functions and other commands
+        restartBt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ggPanel.setVisible(false);
+                player = new Player();
+                layout = new GameLayout(player);
+                locater = new LocationManager(manager, layout);
+                layout.newGame();
+                changeLocation("graveyard"); 
+                gameWindow.remove(ggPanel);
+            }
+
+        });
+        ggPanel.add(restartBt, c);
+        */
+
+        gameWindow.add(ggPanel);
+        gameWindow.revalidate();
+    }
 
     // GAME PANELS ========================================================================================
 
@@ -83,42 +188,21 @@ public class GameManager {
         // Menu panel 
         JPanel menu = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-
-        //JLabel title = new JLabel("Rootin Tootin Revenge");
-        //title.setFont(new Font("Comic Sans",Font.PLAIN, 40));
-        c.fill = GridBagConstraints.PAGE_START;
-        c.weightx = 1.0;
-        c.weighty = 1.0;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.ipady = 0;
+        menu.setLayout(null);
         // Basic Game Title: can change to an image later if we get ambitious
-        BufferedImage titleImg;
+        BufferedImage logoImg;
         try {
-            titleImg = ImageIO.read(new File("sprites/game_logo.png"));
-            JLabel title = new JLabel(new ImageIcon(titleImg));
-            menu.add(title, c);
+            logoImg = ImageIO.read(new File("sprites/game_logo.png"));
+            JLabel title = new JLabel(new ImageIcon(logoImg));
+            title.setBounds(-10, 0, 600, 300);
+            menu.add(title);
         }
         catch (IOException e) {
             System.out.println("Could not load title image");
         }
 
-        JLabel nameL = new JLabel();
-        nameL.setFont(new Font("Comic Sans",Font.PLAIN, 20));
-        c.fill = GridBagConstraints.PAGE_START;
-        c.weightx = 1.0;
-        c.weighty = 1.0;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.ipady = 10;
-        menu.add(nameL, c);
 
         // Chooses Continue Game or New Game whether it's a pause menu or not
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weighty = 1.0;
-        c.gridx = 0;
-        c.gridy = 2;
-        c.ipady = 0;
         if (!pause) {
             // New Game Button:
             JButton startBt = new JButton("New Game");
@@ -132,7 +216,8 @@ public class GameManager {
                 }
 
             });
-            menu.add(startBt, c);
+            startBt.setBounds(100, 440, 400, 50);
+            menu.add(startBt);
         }
         else {
             // Continue Game Button:
@@ -146,15 +231,11 @@ public class GameManager {
                 }
 
             });
-            menu.add(contBt, c);
+            contBt.setBounds(100, 440, 400, 50);
+            menu.add(contBt);
 
             // Save Game Button:
             JButton saveBt = new JButton("Save Game");
-            c.fill = GridBagConstraints.HORIZONTAL;
-            c.weighty = 1.0;
-            c.gridx = 0;
-            c.gridy = 3;
-            c.ipady = 0;
             // This format is how Buttons perform functions and other commands
             saveBt.addActionListener(new ActionListener() {
                 @Override
@@ -173,21 +254,16 @@ public class GameManager {
                 }
 
             });
-            menu.add(saveBt, c);
+            saveBt.setBounds(100, 500, 400, 50);
+            menu.add(saveBt);
         }
         
         // Load Game Button:
         JButton loadBt = new JButton("Load Game");
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weighty = 1.0;
-        c.gridx = 0;
-        c.gridy = 4;
-        c.ipady = 0;
         // This format is how Buttons perform functions and other commands
         loadBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO : Load from file
                 JFileChooser chooser = new JFileChooser();
                 chooser.addChoosableFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
                 // invoke the showsSaveDialog function to show the save dialog
@@ -200,14 +276,17 @@ public class GameManager {
                     System.out.println(layout.getStart());
                     changeLocation(layout.getCurLocation());
                 }
-                // if the user cancelled the operation
-                else
-                    nameL.setText("the user cancelled the operation");
             }
-
         });
-        menu.setBackground(Color.decode("#058AFF"));
-        menu.add(loadBt, c);
+        menu.setBackground(Color.decode("#090a6b"));
+        loadBt.setBounds(100, 500, 400, 50);
+        menu.add(loadBt);
+
+
+        JLabel titleBg = new JLabel(new ImageIcon(titleImg));
+        titleBg.setBounds(0, 0, 600, 600);
+        menu.add(titleBg);
+
         return menu;
     }
     
