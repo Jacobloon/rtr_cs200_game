@@ -71,6 +71,12 @@ public class GamePanel extends JPanel implements ActionListener {
      * Boolean to show if map is visible
      */
     private boolean mapIsVisible = false;
+
+    /**
+     * Boolean to show if current location is visible
+     */
+    
+    private boolean curLocationIsVisible = false;
     /**
      * Creates the panels on which the game is played, changed per location
      * @param layout layout information
@@ -177,6 +183,10 @@ public class GamePanel extends JPanel implements ActionListener {
                         mapIsVisible = false;
                         repaint();
                         break;
+                    case KeyEvent.VK_N:
+                        curLocationIsVisible = false;
+                        repaint();
+                        break;
                 }
                 // Allows another shot in a direction
                 switch (e.getKeyCode()) {
@@ -248,6 +258,42 @@ public class GamePanel extends JPanel implements ActionListener {
         if (mapIsVisible){
           g.drawImage(this.map, 90, 90, this);
         }
+        if (curLocationIsVisible){ //Triggers Location to display if n key is pushed
+          g.drawString(manager.layout.getCurLocation(), 275, 300);
+          for (String neighbor : manager.layout.getConnections().get(name)){
+            String [] neighborsAndLocations = neighbor.split(":");
+            int[] panelLocation = findLabelLocation(Integer.parseInt(neighborsAndLocations[1]));
+            g.drawString(neighborsAndLocations[0], panelLocation[0], panelLocation[1]);
+          }
+        }
+    }
+
+    /**
+     * Method to find where to place Location Label using given position
+     * @param int position holds the direction of the connected area
+     * @return int[] returns pixel locatios x,y
+     */
+    public int[] findLabelLocation(int position){
+      int[] returnLocations = new int[2];
+      switch (position) {
+        case 0: //area left
+          returnLocations[0] = 50;
+          returnLocations[1] = 250;
+          break;
+        case 1: //area up
+          returnLocations[0] = 275;
+          returnLocations[1] = 100;
+          break;
+        case 2: //area right
+          returnLocations[0] = 500;
+          returnLocations[1] = 250;
+          break;
+        case 3: //area down
+          returnLocations[0] = 275;
+          returnLocations[1] = 500;
+          break;
+      }
+      return returnLocations;
     }
     
     /**
