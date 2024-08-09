@@ -7,7 +7,7 @@ import components.Player;
  * Class to define the game's layout, specifically the graphs
  * 
  * @author Jacob Odenthal, Owen Talberg
- * @version 11/25/23
+ * @version 8/9/24
  */
 public class GameLayout {
     // associates a given location label with a set of connected locations
@@ -58,6 +58,10 @@ public class GameLayout {
         return descriptions.get(name);
     }
     
+    /**
+     * Returns the total number of enemies left to defeat
+     * @return tempNum integer count of enemies on the map
+     */
     public int getNumEnemies() {
     	int tempNum = 0;
     	for (LocationDescription loc : this.descriptions.values()) {
@@ -68,13 +72,15 @@ public class GameLayout {
     	return tempNum;
     }
     
-    // TODO: Complete
+    /**
+     * Initializes a new game with randomized starting location for the player and revolver
+     * @exception FileNotFoundException the locations or connections data file is not present or readable
+     */
     public void newGame() {
         try {
             ArrayList<String> locations = new ArrayList<String>();
             this.curLocation = "graveyard";
             File template = new File("locations");
-            System.out.println(template.getAbsolutePath()); // TEST
             Scanner fileS = new Scanner(template);
             while (fileS.hasNext()) {
                 locations.add(fileS.next());
@@ -93,7 +99,6 @@ public class GameLayout {
                 }
             }
             fileS.close();
-            // TODO: Add connections
             template = new File("connections");
             fileS = new Scanner(template);
             while (fileS.hasNextLine()) {
@@ -113,11 +118,9 @@ public class GameLayout {
 
 
     /**
-     * Saves the current game's information
-     * 
+     * Saves the current game's information from health, weapon status, map location, enemy status
      * @param filename to save info to
      */
-    // TODO: Fix specifics and make sure it works
     public void saveGame(String filename) {
         try {
             FileWriter ow = new FileWriter(filename);
@@ -137,8 +140,7 @@ public class GameLayout {
     }
 
     /**
-     * Loads a game from saved file and sets current GameLayout to the state
-     * 
+     * Loads a game from saved file and sets current GameLayout to the file's gamestate
      * @param filename to load info from
      */
     // TODO: Fix specifics and make sure it works
@@ -169,7 +171,6 @@ public class GameLayout {
 
     /**
      * Creates an iterator object that loops through all location names
-     * 
      * @return iterator of the locations
      */
     public Iterator<String> locationIterator() {
@@ -178,7 +179,6 @@ public class GameLayout {
 
     /**
      * Creates an iterator object that loops through all given location's connections
-     * 
      * @return iterator of the connections, null if empty
      */
     public Iterator<String> connectionIterator(String location) {
@@ -187,7 +187,6 @@ public class GameLayout {
 
     /**
      * Getter method for connections
-     * 
      * @return all connections of the current game layout
      */
     public HashMap<String, Set<String>> getConnections() {
@@ -196,7 +195,6 @@ public class GameLayout {
 
     /**
      * Setter method for connections
-     * 
      * @param connections for the gamelayout
      */
     public void setConnections(HashMap<String, Set<String>> connections) {
@@ -205,7 +203,6 @@ public class GameLayout {
 
     /**
      * Getter method for descriptions
-     * 
      * @return all descriptions of the current game layout
      */
     public HashMap<String, LocationDescription> getDescriptions() {
@@ -214,7 +211,6 @@ public class GameLayout {
 
     /**
      * Setter method for descriptions
-     * 
      * @param descriptions for the gamelayout
      */
     public void setDescriptions(HashMap<String, LocationDescription> descriptions) {
@@ -222,7 +218,8 @@ public class GameLayout {
     }
 
     /**
-     * returns the player's starting location
+     * Returns the player's starting location
+     * @return start String user's starting location
      */
     public String getStart() {
         return this.start;
@@ -230,18 +227,24 @@ public class GameLayout {
 
     /**
      * Returns the string name of the revolver's location
+     * @return revolverLocation String revolver's starting location
      */
     public String getRevLocation() {
         return this.revolverLocation;
     }
 
-
     /**
-     * Gets and sets current location
+     * Gets the user's current location
+     * @return curLocation String user's current location
      */
     public String getCurLocation() {
         return this.curLocation;
     }
+
+    /**
+     * Sets the user's current location
+     * @param curLocation String user's current location name
+     */
     public void setCurLocation(String curLocation) {
         this.curLocation = curLocation;
     }

@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import components.*;
 
 /**
  * Driving class for the CS200 game final project. Utilizes Java Swing and other components to create a game interface
@@ -38,7 +36,6 @@ public class GameDriver{
         // Sets the current panel to menu to start the game
         gameWindow.setVisible(true);
     }
-
 
     /**
      * This is where the magic happens

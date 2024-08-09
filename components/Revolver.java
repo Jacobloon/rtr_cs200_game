@@ -1,39 +1,38 @@
 package components;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import components.*;
 
 /**
  * Class used to draw and define the revolver sprite
  * @author Jacob Odenthal, Owen Talberg
- * @version 12/1/2023
+ * @version 8/9/24
  */
 public class Revolver{
-	
+	/**
+     * Starting coordinate positions
+     */
 	private int x = 250;
     private int y = 250;
     
-    // Width and height based on sprite image size
-    private int rWidth = 60;
-    private int rHeight = 35;
-    
+    /**
+     * Sprite of the revolver on the screen
+     */
     private BufferedImage revolverSprite;
-    
     /**
      * Reference to the player object to check for collision
      */
     private Player player;
-    
+    /**
+     * True if not yet collected, false if picked up
+     */
     private boolean visible = true;
     
     /**
      * Constructor for the revolver object
+     * @param player Player to attach the revolver to
      */
     public Revolver(Player player) {
     	this.player = player;

@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 /**
  * Class used to draw and define the player within our game
  * @author Jacob Odenthal, Owen Talberg
- * @version 12/1/2023
+ * @version 8/9/24
  */
 public class Player {
     public enum PlayerDirections {
@@ -38,6 +38,7 @@ public class Player {
     /**
      * Constructor for Player class that will store data that needs to be
      * saved and reloaded.
+     * @exception IOException Player sprite image cannot be read
      */
     public Player() {
         this.x = 250;
@@ -56,7 +57,6 @@ public class Player {
             System.out.println("Cannot load player sprite");
         }
     }
-
 
     /**
      * This draws the player on the screen, and is the method that gets called every tick
@@ -79,13 +79,13 @@ public class Player {
         if (getY() <= 0) {
             setY(0);
         }
-        else if (getY() >= 600 - 10 - pHeight - (pHeight / 2)) { // TODO: Panel Height
+        else if (getY() >= 600 - 10 - pHeight - (pHeight / 2)) { 
             setY(600 - 10 - pHeight - (pHeight / 2));            // TODO: Fix half of player going off bottom screen
         }
         if (getX() <= 0) {
             setX(0);
         }
-        else if (getX() >= 600 - pWidth - (pWidth / 2)) { // TODO: Panel Height
+        else if (getX() >= 600 - pWidth - (pWidth / 2)) { 
             setX(600 - pWidth - (pWidth / 2));           
         }
     }
@@ -113,7 +113,6 @@ public class Player {
     
     public void loseLife() {
         this.life -= 1;
-        System.out.println(this.life);
     }
 
     // GETTER AND SETTER METHODS ===========================================================

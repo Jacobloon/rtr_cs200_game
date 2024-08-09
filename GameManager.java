@@ -1,6 +1,5 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import components.*;
@@ -13,33 +12,36 @@ import java.io.*;
  * This class manages the current JFrame's panel. Essentially, this is the train station where all locations/menus
  * connect in the program before being sent to their destination.
  * @author Jacob Odenthal, Owen Talberg
- * @version 11/28/23
+ * @version 8/9/24
  */
 public class GameManager {
     /**
      * Game window to manage
      */
     JFrame gameWindow;
- 
     /**
      * Our hero; he rode a blazing saddle, he wore a shining star
      */
     Player player;
-    
     /**
-     * 
+     * Handles the game layout/graph
      */
     GameLayout layout;
     /**
-     * 
+     * Handles the game locations
      */
-    // TODO
     LocationManager locater;
-    
-    GameManager manager = this;
-
+    /**
+     * Game Over sprite image
+     */
     BufferedImage gameOver;
+    /**
+     * Game Won sprite image
+     */
     BufferedImage gameWon;
+    /**
+     * Title/Pause Menu display image
+     */
     BufferedImage titleImg;
 
     /**
@@ -71,6 +73,7 @@ public class GameManager {
         gameWindow.add(loadMenu(pause));
         gameWindow.revalidate();
     }
+
     /**
      * Changes the location currently shown on the screen
      * @param gameWindow JFrame to change
@@ -84,7 +87,6 @@ public class GameManager {
         gameWindow.revalidate();
         newPanel.requestFocusInWindow();
     }
-
 
     /**
      * Hopefully you never see this. Shows the lose game menu if you lose
@@ -183,11 +185,11 @@ public class GameManager {
 
     /**
      * Creates the main menu panel, can be called again later
+     * @param pause Boolean True if pausing the game, false if launching the main menu
      */
     public JPanel loadMenu(boolean pause) {
         // Menu panel 
         JPanel menu = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
         menu.setLayout(null);
         // Basic Game Title: can change to an image later if we get ambitious
         BufferedImage logoImg;
@@ -200,7 +202,6 @@ public class GameManager {
         catch (IOException e) {
             System.out.println("Could not load title image");
         }
-
 
         // Chooses Continue Game or New Game whether it's a pause menu or not
         if (!pause) {
@@ -240,7 +241,6 @@ public class GameManager {
             saveBt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // TODO : Load from file
                     String result = (String)JOptionPane.showInputDialog(
                         menu,
                         "Please enter save name", 
