@@ -105,6 +105,7 @@ public class GameManager {
         ggPanel.add(ggLabel,c);
 
         // restart Game Button:
+        // TODO: implement
         /* 
         JButton restartBt = new JButton("Restart?");
         c.fill = GridBagConstraints.PAGE_START;
@@ -152,6 +153,7 @@ public class GameManager {
         ggPanel.add(ggLabel,c);
 
         // restart Game Button:
+        // TODO: implement
         /* 
         JButton restartBt = new JButton("Restart?");
         c.fill = GridBagConstraints.PAGE_START;

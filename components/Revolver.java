@@ -2,6 +2,7 @@ package components;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -33,13 +34,14 @@ public class Revolver{
     /**
      * Constructor for the revolver object
      * @param player Player to attach the revolver to
+     * @exception IOException revolver image file cannot be read
      */
     public Revolver(Player player) {
     	this.player = player;
 	   	try {
 			revolverSprite = ImageIO.read(new File("sprites/rev_temp.png"));
 		}
-		catch (Exception e) {
+		catch (IOException e) {
 			System.out.println("Failure loading revolver sprite.");
 		}
     }

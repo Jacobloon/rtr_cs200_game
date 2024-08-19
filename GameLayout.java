@@ -120,6 +120,7 @@ public class GameLayout {
     /**
      * Saves the current game's information from health, weapon status, map location, enemy status
      * @param filename to save info to
+     * @exception IOException save file could not be saved to
      */
     public void saveGame(String filename) {
         try {
@@ -142,8 +143,8 @@ public class GameLayout {
     /**
      * Loads a game from saved file and sets current GameLayout to the file's gamestate
      * @param filename to load info from
+     * @exception IOException save file could not be read
      */
-    // TODO: Fix specifics and make sure it works
     public void loadGame(File savefile) {
         try {
             Scanner ow = new Scanner(savefile);
@@ -179,6 +180,7 @@ public class GameLayout {
 
     /**
      * Creates an iterator object that loops through all given location's connections
+     * @param location String name of the location
      * @return iterator of the connections, null if empty
      */
     public Iterator<String> connectionIterator(String location) {

@@ -14,24 +14,33 @@ public class Player {
     public enum PlayerDirections {
       UP, DOWN, LEFT, RIGHT
     }
-    
+    /**
+     * Location on map
+     */
     private int x;
     private int y;
-    
-    // Determines how fast the player moves
+    /**
+     * Speed, and corresponding velocities of the player
+     */
     private int speed; 
     private int velX;
     private int velY;
-
-    // Player Size variables
+    /**
+     * Player size variables
+     */
     private int pWidth;
     private int pHeight;
-
-    // Number of hit points the player has left
+    /**
+     * Player's hit points
+     */
     private int life;
-
+    /**
+     * False until the player collects the revolver
+     */
     private boolean hasRevolver = false;
-     
+    /**
+     * Player sprite
+     */
     private BufferedImage sprite;
 
 
